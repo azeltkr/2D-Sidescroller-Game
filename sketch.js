@@ -343,5 +343,5 @@ function keyReleased()
 		isRight = false;
 	}
 }
-//palworld
+
 
