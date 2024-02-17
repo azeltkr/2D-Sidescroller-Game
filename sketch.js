@@ -1,9 +1,9 @@
 //Note: All the scene objects (e.g. mountain, clouds) are in scene.js.
 //Refer to index.html, scene.js is included as part of the project
 
-var gameChar_x;
-var gameChar_y;
-var gameChar_width;
+var bobChar_x;
+var bobChar_y;
+var bobChar_width;
 var floorPos_y;
 
 var isLeft;
@@ -22,16 +22,16 @@ function setup()
 {
 	createCanvas(1024, 576);
 	floorPos_y = height * 3/4;
-	gameChar_x = width/2;
-	gameChar_y = floorPos_y;
-	gameChar_width = 35;
+	bobChar_x = width/2;
+	bobChar_y = floorPos_y;
+	bobChar_width = 35;
 
 
 	isLeft = false;
 	isRight = false;
 	isFalling = false;
 	isPlummeting = false;
-
+	
 	cameraPosX = 0;
 	/** 
 	trees_x = [{pos_x:width/5,pos_y:floorPos_y-41},
@@ -58,10 +58,10 @@ function setup()
 
 function draw()
 {
-	cameraPosX = gameChar_x - width/2;
+	cameraPosX = bobChar_x - width/2;
 	///////////DRAWING CODE//////////
 
-	background(100,155,255); //fill the sky blue
+	background(19,24,98); //fill the night sky
     
 	//draw some green ground
 	noStroke();
@@ -167,73 +167,73 @@ function draw()
 	{
 		// add your jumping-left code
 	    fill(192,192,192);
-    	ellipse(gameChar_x+7,gameChar_y-40,35,40); //char body
-    	ellipse(gameChar_x+7,gameChar_y-68,20); //char head
+    	ellipse(bobChar_x+7,bobChar_y-40,35,40); //char body
+    	ellipse(bobChar_x+7,bobChar_y-68,20); //char head
     	fill(0);
-    	ellipse(gameChar_x-2.5,gameChar_y-70,3.2,6.5); //right eye
-    	ellipse(gameChar_x+2,gameChar_y-70,3.5,7); //left eye
+    	ellipse(bobChar_x-2.5,bobChar_y-70,3.2,6.5); //right eye
+    	ellipse(bobChar_x+2,bobChar_y-70,3.5,7); //left eye
 		fill(255,0,0);
-		ellipse(gameChar_x,gameChar_y,10,10);
+		ellipse(bobChar_x,bobChar_y,10,10);
 	}
 	else if(isRight && isFalling)
 	{
 		// add your jumping-right code
 	    fill(192,192,192);
-    	ellipse(gameChar_x-7,gameChar_y-40,35,40); //char body
-    	ellipse(gameChar_x-7,gameChar_y-68,20); //char head
+    	ellipse(bobChar_x-7,bobChar_y-40,35,40); //char body
+    	ellipse(bobChar_x-7,bobChar_y-68,20); //char head
     	fill(0);
-    	ellipse(gameChar_x-2.5,gameChar_y-70,3.5,7); //right eye
-    	ellipse(gameChar_x+2,gameChar_y-70,3.2,6.5); //left eye
+    	ellipse(bobChar_x-2.5,bobChar_y-70,3.5,7); //right eye
+    	ellipse(bobChar_x+2,bobChar_y-70,3.2,6.5); //left eye
 		fill(255,0,0);
-		ellipse(gameChar_x,gameChar_y,10,10);
+		ellipse(bobChar_x,bobChar_y,10,10);
 	}
 	else if(isLeft)
 	{
 		// add your walking left code
 		fill(192,192,192);
-		ellipse(gameChar_x+7,gameChar_y-25,30,55); //char body
-		ellipse(gameChar_x+7,gameChar_y-60,20); //char head
+		ellipse(bobChar_x+7,bobChar_y-25,30,55); //char body
+		ellipse(bobChar_x+7,bobChar_y-60,20); //char head
 		fill(0);
-		ellipse(gameChar_x-2.5,gameChar_y-62,3.2,6.5); //right eye
-		ellipse(gameChar_x+2,gameChar_y-62,3.5,7); //left eye
+		ellipse(bobChar_x-2.5,bobChar_y-62,3.2,6.5); //right eye
+		ellipse(bobChar_x+2,bobChar_y-62,3.5,7); //left eye
 		fill(255,0,0);
-		ellipse(gameChar_x,gameChar_y,10,10);
+		ellipse(bobChar_x,bobChar_y,10,10);
 	}
 	else if(isRight)
 	{
 		// add your walking right code
 		fill(192,192,192);
-		ellipse(gameChar_x-7,gameChar_y-25,30,55); //char body
-		ellipse(gameChar_x-7,gameChar_y-60,20); //char head
+		ellipse(bobChar_x-7,bobChar_y-25,30,55); //char body
+		ellipse(bobChar_x-7,bobChar_y-60,20); //char head
 		fill(0);
-		ellipse(gameChar_x-2.5,gameChar_y-62,3.5,7); //right eye
-		ellipse(gameChar_x+2,gameChar_y-62,3.2,6.5); //left eye
+		ellipse(bobChar_x-2.5,bobChar_y-62,3.5,7); //right eye
+		ellipse(bobChar_x+2,bobChar_y-62,3.2,6.5); //left eye
 		fill(255,0,0);
-		ellipse(gameChar_x,gameChar_y,10,10);
+		ellipse(bobChar_x,bobChar_y,10,10);
 	}
 	else if(isFalling || isPlummeting)
 	{
 		// add your jumping facing forwards code
 		fill(192,192,192);
-		ellipse(gameChar_x,gameChar_y-40,47,40); //char body
-		ellipse(gameChar_x,gameChar_y-68,20); //char head
+		ellipse(bobChar_x,bobChar_y-40,47,40); //char body
+		ellipse(bobChar_x,bobChar_y-68,20); //char head
 		fill(0);
-		ellipse(gameChar_x-3,gameChar_y-70,3.5,7); //right eye
-		ellipse(gameChar_x+3,gameChar_y-70,3.5,7); //lefteye
+		ellipse(bobChar_x-3,bobChar_y-70,3.5,7); //right eye
+		ellipse(bobChar_x+3,bobChar_y-70,3.5,7); //lefteye
 		fill(255,0,0);
-		ellipse(gameChar_x,gameChar_y,10,10);
+		ellipse(bobChar_x,bobChar_y,10,10);
 	}
 	else
 	{
 		// add your standing front facing code
 		fill(192,192,192);
-		ellipse(gameChar_x,gameChar_y-25,35,55); //char body
-		ellipse(gameChar_x,gameChar_y-60,20); //char head
+		ellipse(bobChar_x,bobChar_y-25,35,55); //char body
+		ellipse(bobChar_x,bobChar_y-60,20); //char head
 		fill(0);
-		ellipse(gameChar_x-3,gameChar_y-62,3.5,7); //left eye
-		ellipse(gameChar_x+3,gameChar_y-62,3.5,7); //right eye
+		ellipse(bobChar_x-3,bobChar_y-62,3.5,7); //left eye
+		ellipse(bobChar_x+3,bobChar_y-62,3.5,7); //right eye
 		fill(255,0,0);
-		ellipse(gameChar_x,gameChar_y,10,10);
+		ellipse(bobChar_x,bobChar_y,10,10);
 	}
     
 	pop();
@@ -243,13 +243,13 @@ function draw()
 	//Put conditional statements to move the game character below here
 	if(isPlummeting)
 	{
-		gameChar_y += 10;
+		bobChar_y += 10;
 		return;
 	}
 
-	if(gameChar_y<floorPos_y)
+	if(bobChar_y<floorPos_y)
 	{
-		gameChar_y += 1;
+		bobChar_y += 1;
 		isFalling = true;
 	}
 	else 
@@ -259,17 +259,17 @@ function draw()
 
 	if(isLeft == true)
 	{
-		gameChar_x -= 5;
+		bobChar_x -= 5;
 	}
 	else if(isRight == true)
 	{
-		gameChar_x += 5;
+		bobChar_x += 5;
 	}
 
 	//check if char is in range of collectable
 	for(var i=0;i<collectables.length;i++)
 	{
-		var d = dist(gameChar_x,gameChar_y,collectables[i].x_pos,collectables[i].y_pos);
+		var d = dist(bobChar_x,bobChar_y,collectables[i].x_pos,collectables[i].y_pos);
 		if(d<30)
 		{
 			collectables[i].isFound = true;
@@ -280,11 +280,11 @@ function draw()
 	for(var i=0;i<canyons.length;i++)
 	{
 		//check if char is on the ground
-		var cond1 = gameChar_y == floorPos_y;
+		var cond1 = bobChar_y == floorPos_y;
 		//check if char is at the left side of canyon
-		var cond2 = gameChar_x - gameChar_width/2>(canyons[i].x_pos);
+		var cond2 = bobChar_x - bobChar_width/2>(canyons[i].x_pos);
 		//check if char is at the right side of canyon
-		var cond3 = gameChar_x + gameChar_width/2<(canyons[i].x_pos+canyons[i].width);
+		var cond3 = bobChar_x + bobChar_width/2<(canyons[i].x_pos+canyons[i].width);
 
 		//check if game char is over the canyon
 		if(cond1 && cond2 && cond3)
@@ -316,10 +316,10 @@ function keyPressed()
 	}
 	else if(keyCode == 38)
 	{
-		if(gameChar_y>=floorPos_y)
+		if(bobChar_y>=floorPos_y)
 		{
 			console.log("up arrow");
-			gameChar_y -= 50;
+			bobChar_y -= 50;
 		}
 	}
 }
