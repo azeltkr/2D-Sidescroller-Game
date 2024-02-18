@@ -27,6 +27,7 @@ function setup()
 	bobChar_width = 35;
 	setupScene(); 
 
+	gameScore = 0;
 	raindrops = [];
 
 	isLeft = false;
@@ -98,6 +99,11 @@ function draw()
 		raindrops[i].display();
 	}
 	noStroke();
+
+	//draw game score
+	fill(255,255,255);
+	textSize(30);
+	text("Score: " + gameScore, 10, 30);
 
     push();
 	translate(-cameraPosX, 0);
@@ -280,11 +286,16 @@ function draw()
 	//check if char is in range of collectable
 	for(var i=0;i<collectables.length;i++)
 	{
-		var d = dist(bobChar_x,bobChar_y,collectables[i].x_pos,collectables[i].y_pos);
-		if(d<30)
+		if(collectables[i].isFound == false)
 		{
-			collectables[i].isFound = true;
-		};
+			var d = dist(bobChar_x,bobChar_y,collectables[i].x_pos,collectables[i].y_pos);
+			if(d<30)
+			{
+				collectables[i].isFound = true;
+				//increment the game score
+				gameScore+=10;
+			};
+		}
 	}
 
 	//check if char is over the canyon
