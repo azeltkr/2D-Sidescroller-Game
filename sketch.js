@@ -11,13 +11,11 @@ var isRight;
 var isFalling;
 var isPlummeting;
 
-var mountains;
-var trees_x;
-var clouds;
 var collectables;
 var canyons;
 
 var raindrops;
+var gameScore;
 
 var cameraPosX;
 function setup()
@@ -27,6 +25,7 @@ function setup()
 	bobChar_x = width/2;
 	bobChar_y = floorPos_y;
 	bobChar_width = 35;
+	setupScene(); 
 
 	raindrops = [];
 
@@ -36,20 +35,6 @@ function setup()
 	isPlummeting = false;
 	
 	cameraPosX = 0;
-	/** 
-	trees_x = [{pos_x:width/5,pos_y:floorPos_y-41},
-	{pos_x:width/4,pos_y:floorPos_y-41},
-	{pos_x:width/3,pos_y:floorPos_y-41}]; */
-
-	trees_x = [200, 400, 750];
-
-	clouds = [{pos_x:random(10,width),pos_y:random(20,100),size:random(50,80)},
-	{pos_x:random(10,width),pos_y:random(100,200),size:random(50,80)},
-	{pos_x:random(10,width),pos_y:random(200,250),size:random(50,80)}];
-
-	mountains = [{pos_x:300,pos_y:floorPos_y-125,height:250,width:150},
-	{pos_x:550,pos_y:floorPos_y-75,height:150,width:100},
-	{pos_x:425,pos_y:floorPos_y-175,height:350,width:200}];
 
 	collectables = [{x_pos:100, y_pos:floorPos_y-16, size:40, isFound:false},
 		{x_pos:200, y_pos:floorPos_y-16, size:40, isFound:false},
@@ -81,7 +66,7 @@ class Raindrop
 
     if (this.y > floorPos_y) 
 	{
-      // Reset raindrop if it goes below the canvas
+      // Reset raindrop if it reaches ground
       this.y = random(-200, -100);
       this.x = random(0, width);
     }
@@ -117,30 +102,10 @@ function draw()
     push();
 	translate(-cameraPosX, 0);
     //draw the clouds
-	for(var i=0;i<clouds.length;i++)
-	{
-		fill(255);
-		ellipse(clouds[i].pos_x,clouds[i].pos_y, 30, 30);
-		ellipse(clouds[i].pos_x-20,clouds[i].pos_y-30, 25, 25);
-		ellipse(clouds[i].pos_x+10,clouds[i].pos_y-25, 50, 50);
-		ellipse(clouds[i].pos_x-20,clouds[i].pos_y+10, 70, 70);    
-		ellipse(clouds[i].pos_x+30, clouds[i].pos_y+10, 55, 55);
-		ellipse(clouds[i].pos_x+57,clouds[i].pos_y+20, 28, 28);
-		ellipse(clouds[i].pos_x-57,clouds[i].pos_y+25, 32, 32);    
-		//anchor point
-		fill(255,0,0);
-		ellipse(clouds[i].pos_x,clouds[i].pos_y,10,10);
-	}
+	drawClouds();
 
 	//animate clouds
-	for(var i=0;i<clouds.length;i++)
-	{
-		if(clouds[i].pos_x>width)
-		
-			clouds[i].pos_x = 0;
-			clouds[i].pos_x += random(1, 2);
-		
-	}
+	animateClouds();
     
     //draw the mountains
 	for(var i=0;i<mountains.length;i++)
