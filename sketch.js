@@ -6,6 +6,9 @@ var bobChar_y;
 var bobChar_width;
 var floorPos_y;
 
+var batCar_x;
+var batCar_y;
+
 var isLeft;
 var isRight;
 var isFalling;
@@ -25,6 +28,10 @@ function setup()
 	bobChar_x = width/2;
 	bobChar_y = floorPos_y;
 	bobChar_width = 35;
+
+	batCar_x = 2500;
+	batCar_y = floorPos_y-40;
+
 	setupScene(); 
 
 	gameScore = 0;
@@ -114,34 +121,43 @@ function draw()
 	animateClouds();
     
     //draw the mountains
-	for(var i=0;i<mountains.length;i++)
-	{
-		fill(112, 67, 64);
-		triangle(mountains[i].pos_x - mountains[i].width/2, mountains[i].pos_y + mountains[i].height/2, mountains[i].pos_x, mountains[i].pos_y - mountains[i].height/2, mountains[i].pos_x + mountains[i].width/2, mountains[i].pos_y + mountains[i].height/2);
-		//anchor point
-		fill(255,0,0);
-		ellipse(mountains[i].pos_x,mountains[i].pos_y,10,10);
-	}
+	drawMountains();
     
     //draw the trees_x
-	for(var i=0;i<trees_x.length;i++)
-	{
-		noStroke();
-		//Brown Tree Trunk
-		fill(82, 47, 45); 
-		rectMode(CENTER);
-		rect(trees_x[i], floorPos_y-41, 40, 82);
-		rectMode(CORNER);
-		//tree leaves
-		fill(149, 190, 75);
-		ellipse(trees_x[i]-30, floorPos_y-92, 65, 65);
-		ellipse(trees_x[i]+30, floorPos_y-92, 65, 65);
-		ellipse(trees_x[i], floorPos_y-132, 65, 65);
-		ellipse(trees_x[i], floorPos_y-82, 50, 50);
-		//anchor point
-		fill(255,0,0);
-		ellipse(trees_x[i],floorPos_y-41,10,10);
+	drawTrees_x();
+
+	//BATMOBILE
+	//exhaust
+	fill(128,128,128);
+	rect(batCar_x-120, batCar_y, 100,  8);
+	triangle(batCar_x-112, batCar_y, batCar_x-105, batCar_y-10, batCar_x-100,batCar_y);
+	//draw batMob chasis
+	fill(48, 50, 52);
+	rect(batCar_x-100, batCar_y-20, 255, 40, 10);
+	triangle(batCar_x+150.5, batCar_y-20, batCar_x+170.5, batCar_y-20, batCar_x+150.5, batCar_y+20);
+	bezier(batCar_x+40, batCar_y-25, batCar_x+70, batCar_y-35, batCar_x+150.5, batCar_y-35, batCar_x+170.5, batCar_y-20);
+	rect(batCar_x-100, batCar_y-24, 265, 5, 10);
+	rect(batCar_x+42, batCar_y-25, 25, 7, 10);
+	quad(batCar_x-150, batCar_y-25, batCar_x-60, batCar_y-48, batCar_x+20, batCar_y-48, batCar_x+51, batCar_y-20);
+	quad(batCar_x-150, batCar_y-25, batCar_x-130, batCar_y-5, batCar_x-82, batCar_y-5, batCar_x-80, batCar_y-25);
+	//wheels
+	fill(32,32,32);
+	ellipse(batCar_x-82, batCar_y+11, 55);
+	ellipse(batCar_x+90, batCar_y+11, 55);
+	//windows
+	fill(192,192,192);
+	quad(batCar_x-40, batCar_y-25, batCar_x-40, batCar_y-43, batCar_x+15,batCar_y-43, batCar_x+37, batCar_y-25);
+	triangle(batCar_x-40, batCar_y-25, batCar_x-63, batCar_y-35, batCar_x-40, batCar_y-43);
+	//exhaust smoke
+	noStroke();
+	for (var i = 0; i < 10; i++) {
+		var alpha = map(i, 0, 10, 50, 0); // Adjust the mapping based on the loop variable
+		fill(125, alpha);
+		ellipse(batCar_x - 120 - i * 5, batCar_y + 5, 5); // Adjust the x-position for each ellipse
 	}
+	//car anchor point
+	fill(255,0,0);
+	ellipse(batCar_x,batCar_y,10,10);
 
 	//draw collectable
 	for(var i=0;i<collectables.length;i++)
