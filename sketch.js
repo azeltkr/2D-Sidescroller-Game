@@ -1,13 +1,12 @@
 //Note: All the scene objects (e.g. mountain, clouds) are in scene.js.
 //Refer to index.html, scene.js is included as part of the project
 
-var bobChar_x;
-var bobChar_y;
-var bobChar_width;
+var batChar_x;
+var batChar_y;
+var batChar_width;
 var floorPos_y;
 
-var batCar_x;
-var batCar_y;
+var batCar;
 
 var isLeft;
 var isRight;
@@ -19,18 +18,26 @@ var canyons;
 
 var raindrops;
 var gameScore;
+var batLives;
+var gameOver;
 
 var cameraPosX;
+
 function setup()
 {
 	createCanvas(1024, 576);
+	//init lives
+	batLives = 3;
+	//init gameOver is false
+	gameOver = false;
+	init();
+}
+function init()
+{
 	floorPos_y = height * 3/4;
-	bobChar_x = width/2;
-	bobChar_y = floorPos_y;
-	bobChar_width = 35;
-
-	batCar_x = 2500;
-	batCar_y = floorPos_y-40;
+	batChar_x = width/2;
+	batChar_y = floorPos_y;
+	batChar_width = 35;
 
 	setupScene(); 
 
@@ -44,11 +51,12 @@ function setup()
 	
 	cameraPosX = 0;
 
-	collectables = [{x_pos:100, y_pos:floorPos_y-16, size:40, isFound:false},
-		{x_pos:200, y_pos:floorPos_y-16, size:40, isFound:false},
-		{x_pos:1000, y_pos:floorPos_y-16, size:40, isFound:false}];
+	collectables = [{pos_x:100, pos_y:floorPos_y-16, size:40, isFound:false},
+		{pos_x:200, pos_y:floorPos_y-16, size:40, isFound:false},
+		{pos_x:1000, pos_y:floorPos_y-16, size:40, isFound:false}];
 
-	canyons = [{x_pos:600, width:100},{x_pos:800, width:100}];
+	canyons = [{pos_x:600, width:100},{pos_x:800, width:100}];
+	batCar = {pos_x: 2500, pos_y: floorPos_y-40, isReached: false};
 	
 	// Initialize raindrops
 	for (var i = 0; i < 100; i++) 
@@ -89,7 +97,7 @@ class Raindrop
 
 function draw()
 {
-	cameraPosX = bobChar_x - width/2;
+	cameraPosX = batChar_x - width/2;
 	///////////DRAWING CODE//////////
 
 	background(19,24,98); //fill the night sky
@@ -112,6 +120,29 @@ function draw()
 	textSize(30);
 	text("Score: " + gameScore, 10, 30);
 
+	//Bat life tokens
+	drawbatLives();
+	
+	if(gameOver)
+	{
+		drawGameOver();
+		//set bat char back to starting point
+		batChar_x = width/2;
+		batChar_y = floorPos_y;
+
+		//draw bat char
+		fill(192,192,192);
+		ellipse(batChar_x,batChar_y-25,35,55); //char body
+		ellipse(batChar_x,batChar_y-60,20); //char head
+		fill(0);
+		ellipse(batChar_x-3,batChar_y-62,3.5,7); //left eye
+		ellipse(batChar_x+3,batChar_y-62,3.5,7); //right eye
+		fill(255,0,0);
+		ellipse(batChar_x,batChar_y,10,10);
+
+		return;
+	}
+
     push();
 	translate(-cameraPosX, 0);
     //draw the clouds
@@ -126,38 +157,8 @@ function draw()
     //draw the trees_x
 	drawTrees_x();
 
-	//BATMOBILE
-	//exhaust
-	fill(128,128,128);
-	rect(batCar_x-120, batCar_y, 100,  8);
-	triangle(batCar_x-112, batCar_y, batCar_x-105, batCar_y-10, batCar_x-100,batCar_y);
-	//draw batMob chasis
-	fill(48, 50, 52);
-	rect(batCar_x-100, batCar_y-20, 255, 40, 10);
-	triangle(batCar_x+150.5, batCar_y-20, batCar_x+170.5, batCar_y-20, batCar_x+150.5, batCar_y+20);
-	bezier(batCar_x+40, batCar_y-25, batCar_x+70, batCar_y-35, batCar_x+150.5, batCar_y-35, batCar_x+170.5, batCar_y-20);
-	rect(batCar_x-100, batCar_y-24, 265, 5, 10);
-	rect(batCar_x+42, batCar_y-25, 25, 7, 10);
-	quad(batCar_x-150, batCar_y-25, batCar_x-60, batCar_y-48, batCar_x+20, batCar_y-48, batCar_x+51, batCar_y-20);
-	quad(batCar_x-150, batCar_y-25, batCar_x-130, batCar_y-5, batCar_x-82, batCar_y-5, batCar_x-80, batCar_y-25);
-	//wheels
-	fill(32,32,32);
-	ellipse(batCar_x-82, batCar_y+11, 55);
-	ellipse(batCar_x+90, batCar_y+11, 55);
-	//windows
-	fill(192,192,192);
-	quad(batCar_x-40, batCar_y-25, batCar_x-40, batCar_y-43, batCar_x+15,batCar_y-43, batCar_x+37, batCar_y-25);
-	triangle(batCar_x-40, batCar_y-25, batCar_x-63, batCar_y-35, batCar_x-40, batCar_y-43);
-	//exhaust smoke
-	noStroke();
-	for (var i = 0; i < 10; i++) {
-		var alpha = map(i, 0, 10, 50, 0); // Adjust the mapping based on the loop variable
-		fill(125, alpha);
-		ellipse(batCar_x - 120 - i * 5, batCar_y + 5, 5); // Adjust the x-position for each ellipse
-	}
-	//car anchor point
-	fill(255,0,0);
-	ellipse(batCar_x,batCar_y,10,10);
+	//Bat Boy Char and Bat Car
+	drawbatCharAndCar();
 
 	//draw collectable
 	for(var i=0;i<collectables.length;i++)
@@ -168,19 +169,19 @@ function draw()
 			//noStroke();
 			beginShape();
 			//vertex(444, 432);
-			vertex(collectables[i].x_pos-1, collectables[i].y_pos+16);
+			vertex(collectables[i].pos_x-1, collectables[i].pos_y+16);
 			//vertex(430, 410);
-			vertex(collectables[i].x_pos-15, collectables[i].y_pos-6);
+			vertex(collectables[i].pos_x-15, collectables[i].pos_y-6);
 			//vertex(435, 400);
-			vertex(collectables[i].x_pos-10, collectables[i].y_pos-16);
+			vertex(collectables[i].pos_x-10, collectables[i].pos_y-16);
 			//vertex(455, 400);
-			vertex(collectables[i].x_pos+10, collectables[i].y_pos-16);
+			vertex(collectables[i].pos_x+10, collectables[i].pos_y-16);
 			//vertex(460, 410);
-			vertex(collectables[i].x_pos+15, collectables[i].y_pos-6);
+			vertex(collectables[i].pos_x+15, collectables[i].pos_y-6);
 			endShape();
 			//anchor point
 			fill(255,0,0);
-			ellipse(collectables[i].x_pos,collectables[i].y_pos,10,10);
+			ellipse(collectables[i].pos_x,collectables[i].pos_y,10,10);
 		}
 	}
 
@@ -188,85 +189,11 @@ function draw()
 	for(var i=0;i<canyons.length;i++)
 	{
 		fill(0,0,0);
-		rect(canyons[i].x_pos, floorPos_y, canyons[i].width, height-floorPos_y);
+		rect(canyons[i].pos_x, floorPos_y, canyons[i].width, height-floorPos_y);
 		//NB. the canyon should go from ground-level to the bottom of the screen
 		//anchor point
 		fill(255,0,0);
-		ellipse(canyons[i].x_pos,floorPos_y,10,10);;
-	}
-
-	//the game character
-	if(isLeft && isFalling)
-	{
-		// add your jumping-left code
-	    fill(192,192,192);
-    	ellipse(bobChar_x+7,bobChar_y-40,35,40); //char body
-    	ellipse(bobChar_x+7,bobChar_y-68,20); //char head
-    	fill(0);
-    	ellipse(bobChar_x-2.5,bobChar_y-70,3.2,6.5); //right eye
-    	ellipse(bobChar_x+2,bobChar_y-70,3.5,7); //left eye
-		fill(255,0,0);
-		ellipse(bobChar_x,bobChar_y,10,10);
-	}
-	else if(isRight && isFalling)
-	{
-		// add your jumping-right code
-	    fill(192,192,192);
-    	ellipse(bobChar_x-7,bobChar_y-40,35,40); //char body
-    	ellipse(bobChar_x-7,bobChar_y-68,20); //char head
-    	fill(0);
-    	ellipse(bobChar_x-2.5,bobChar_y-70,3.5,7); //right eye
-    	ellipse(bobChar_x+2,bobChar_y-70,3.2,6.5); //left eye
-		fill(255,0,0);
-		ellipse(bobChar_x,bobChar_y,10,10);
-	}
-	else if(isLeft)
-	{
-		// add your walking left code
-		fill(192,192,192);
-		ellipse(bobChar_x+7,bobChar_y-25,30,55); //char body
-		ellipse(bobChar_x+7,bobChar_y-60,20); //char head
-		fill(0);
-		ellipse(bobChar_x-2.5,bobChar_y-62,3.2,6.5); //right eye
-		ellipse(bobChar_x+2,bobChar_y-62,3.5,7); //left eye
-		fill(255,0,0);
-		ellipse(bobChar_x,bobChar_y,10,10);
-	}
-	else if(isRight)
-	{
-		// add your walking right code
-		fill(192,192,192);
-		ellipse(bobChar_x-7,bobChar_y-25,30,55); //char body
-		ellipse(bobChar_x-7,bobChar_y-60,20); //char head
-		fill(0);
-		ellipse(bobChar_x-2.5,bobChar_y-62,3.5,7); //right eye
-		ellipse(bobChar_x+2,bobChar_y-62,3.2,6.5); //left eye
-		fill(255,0,0);
-		ellipse(bobChar_x,bobChar_y,10,10);
-	}
-	else if(isFalling || isPlummeting)
-	{
-		// add your jumping facing forwards code
-		fill(192,192,192);
-		ellipse(bobChar_x,bobChar_y-40,47,40); //char body
-		ellipse(bobChar_x,bobChar_y-68,20); //char head
-		fill(0);
-		ellipse(bobChar_x-3,bobChar_y-70,3.5,7); //right eye
-		ellipse(bobChar_x+3,bobChar_y-70,3.5,7); //lefteye
-		fill(255,0,0);
-		ellipse(bobChar_x,bobChar_y,10,10);
-	}
-	else
-	{
-		// add your standing front facing code
-		fill(192,192,192);
-		ellipse(bobChar_x,bobChar_y-25,35,55); //char body
-		ellipse(bobChar_x,bobChar_y-60,20); //char head
-		fill(0);
-		ellipse(bobChar_x-3,bobChar_y-62,3.5,7); //left eye
-		ellipse(bobChar_x+3,bobChar_y-62,3.5,7); //right eye
-		fill(255,0,0);
-		ellipse(bobChar_x,bobChar_y,10,10);
+		ellipse(canyons[i].pos_x,floorPos_y,10,10);;
 	}
     
 	pop();
@@ -276,13 +203,13 @@ function draw()
 	//Put conditional statements to move the game character below here
 	if(isPlummeting)
 	{
-		bobChar_y += 10;
+		batChar_y += 10;
 		return;
 	}
 
-	if(bobChar_y<floorPos_y)
+	if(batChar_y<floorPos_y)
 	{
-		bobChar_y += 1;
+		batChar_y += 1;
 		isFalling = true;
 	}
 	else 
@@ -292,19 +219,22 @@ function draw()
 
 	if(isLeft == true)
 	{
-		bobChar_x -= 5;
+		batChar_x -= 5;
 	}
 	else if(isRight == true)
 	{
-		bobChar_x += 5;
+		batChar_x += 5;
 	}
+
+	//check if char has reached bat car
+	checkIfbatCharReachedBatCar();
 
 	//check if char is in range of collectable
 	for(var i=0;i<collectables.length;i++)
 	{
 		if(collectables[i].isFound == false)
 		{
-			var d = dist(bobChar_x,bobChar_y,collectables[i].x_pos,collectables[i].y_pos);
+			var d = dist(batChar_x,batChar_y,collectables[i].pos_x,collectables[i].pos_y);
 			if(d<30)
 			{
 				collectables[i].isFound = true;
@@ -318,11 +248,11 @@ function draw()
 	for(var i=0;i<canyons.length;i++)
 	{
 		//check if char is on the ground
-		var cond1 = bobChar_y == floorPos_y;
+		var cond1 = batChar_y == floorPos_y;
 		//check if char is at the left side of canyon
-		var cond2 = bobChar_x - bobChar_width/2>(canyons[i].x_pos);
+		var cond2 = batChar_x - batChar_width/2>(canyons[i].pos_x);
 		//check if char is at the right side of canyon
-		var cond3 = bobChar_x + bobChar_width/2<(canyons[i].x_pos+canyons[i].width);
+		var cond3 = batChar_x + batChar_width/2<(canyons[i].pos_x+canyons[i].width);
 
 		//check if game char is over the canyon
 		if(cond1 && cond2 && cond3)
@@ -330,11 +260,24 @@ function draw()
 			isPlummeting=true;
 		};
 	};
+
+	//mouse pointer coordinates
+	push();
+	fill(255,0,0);
+	stroke(255,0,0);
+	strokeWeight(1);
+	text(mouseX + ","+ mouseY, mouseX,mouseY);
+	pop();
+
 }
 
 
 function keyPressed()
 {	
+	if(gameOver)
+	{
+		return;
+	}
 	// if statements to control the animation of the character when
 	// keys are pressed.
 
@@ -354,16 +297,20 @@ function keyPressed()
 	}
 	else if(keyCode == 38)
 	{
-		if(bobChar_y>=floorPos_y)
+		if(batChar_y>=floorPos_y)
 		{
 			console.log("up arrow");
-			bobChar_y -= 50;
+			batChar_y -= 50;
 		}
 	}
 }
 
 function keyReleased()
 {
+	if(gameOver)
+	{
+		return;
+	}
 	// if statements to control the animation of the character when
 	// keys are released.
 
