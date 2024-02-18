@@ -129,7 +129,7 @@ function drawbatCharAndCar()
 		ellipse(batCar.pos_x,batCar.pos_y,10,10);
 		//animate car to move
 		batCar.pos_x += 3;
-		if(batCar.pos_x > 3400 && gameOver != true)
+		if(batCar.pos_x > 3300 && gameOver != true)
 		{
 			gameOver = true;
 		}
