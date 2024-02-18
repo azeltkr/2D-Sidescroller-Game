@@ -17,6 +17,8 @@ var clouds;
 var collectables;
 var canyons;
 
+var raindrops;
+
 var cameraPosX;
 function setup()
 {
@@ -26,6 +28,7 @@ function setup()
 	bobChar_y = floorPos_y;
 	bobChar_width = 35;
 
+	raindrops = [];
 
 	isLeft = false;
 	isRight = false;
@@ -53,7 +56,42 @@ function setup()
 		{x_pos:1000, y_pos:floorPos_y-16, size:40, isFound:false}];
 
 	canyons = [{x_pos:600, width:100},{x_pos:800, width:100}];
+	
+	// Initialize raindrops
+	for (var i = 0; i < 100; i++) 
+	{
+		raindrops.push(new Raindrop(random(width), random(height)));
+	}
+}
 
+//define the behavior of individual raindrop
+class Raindrop 
+{
+	constructor(x, y) 
+	{
+		this.x = x;
+		this.y = y;
+		this.length = 10;
+		this.speed = 5;
+	}
+
+	fall()
+{
+	this.y += this.speed;
+
+    if (this.y > floorPos_y) 
+	{
+      // Reset raindrop if it goes below the canvas
+      this.y = random(-200, -100);
+      this.x = random(0, width);
+    }
+}
+
+	display()
+	{
+		stroke(150, 200, 255);
+		line(this.x, this.y, this.x, this.y + this.length);
+	}
 }
 
 function draw()
@@ -67,6 +105,14 @@ function draw()
 	noStroke();
 	fill(0,155,0);
 	rect(0, floorPos_y, width, height - floorPos_y); 
+
+	// Display and animate raindrops
+	for (var i = 0; i < raindrops.length; i++) 
+	{
+		raindrops[i].fall();
+		raindrops[i].display();
+	}
+	noStroke();
 
     push();
 	translate(-cameraPosX, 0);
