@@ -166,14 +166,6 @@ function draw()
 	rect(0, floorPos_y+20, width, height - floorPos_y+20); 
 
 	noStroke();
-
-	//draw game score
-	fill(255,255,255);
-	textSize(30);
-	text("Score: " + gameScore, 10, 30);
-
-	//Bat life tokens
-	drawbatLives();
 	
 	if(gameOver)
 	{
@@ -323,6 +315,14 @@ function draw()
 			isPlummeting=true;
 		};
 	};
+
+	//draw game score
+	fill(255,255,255);
+	textSize(30);
+	text("Score: " + gameScore, 10, 30);
+
+	//Bat life tokens
+	drawbatLives();
 
 	//mouse pointer coordinates
 	push();
