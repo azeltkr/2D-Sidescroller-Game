@@ -79,7 +79,7 @@ function drawTrees_x()
 		rect(trees_x[i], floorPos_y-41, 40, 82);
 		rectMode(CORNER);
 		//tree leaves
-		fill(149, 190, 75);
+		fill(19, 71, 77);
 		ellipse(trees_x[i]-30, floorPos_y-92, 65, 65);
 		ellipse(trees_x[i]+30, floorPos_y-92, 65, 65);
 		ellipse(trees_x[i], floorPos_y-132, 65, 65);
@@ -90,7 +90,63 @@ function drawTrees_x()
 	}
 }
 
-function drawbatCharAndCar()
+function drawBackgroundBuildings()
+{
+	//signal
+	noStroke();
+	fill(250, 249, 246, 50);
+	triangle(924, 268, 729, 91, 790, 70);
+	fill(224, 246, 238);
+	ellipse(760, 82, 72, 52);
+
+	fill(12,37,87);
+	noStroke();
+	//building 1
+	rect(0, 245, 50, height-245);
+    rect(22.5, 210, 5, 35);
+	rect(50, 270, 9, height-270);
+	rect(52, 368, 40, height-368);
+	//building 2
+	rect(70, 200, 80, height-200);
+	rect(72, 193, 60, 20);
+	//building 3
+	rect(150, 243, 30, height-243);
+	rect(155, 180, 90, height-180);
+	rect(180, 160, 5, 40);
+	rect(223, 130, 5, 60);
+	//building 4
+	rect(250, 140, 110, height-140);
+	rect(235, 217, 30, height-217);
+	rect(290, 127, 70, 50);
+	//building 5
+	rect(366, 199, 90,  height-199);
+	rect(349, 307, 40,  height-307);
+	rect(449, 282, 30, height-282);
+	//building 6
+	rect(463, 253, 100, height-253);
+	rect(485,  240, 70, 50);
+	//building 7
+	rect(563, 95, 80, height-95);
+	rect(579, 82, 50, 50);
+	rect(603, 38, 5, 80);
+	//building 8
+	rect(648, 148, 120, height-148);
+	rect(630, 196, 40, height-196);
+	//building 9
+	rect(773, 219, 90, height-219);
+	rect(752, 278, 40, height-278);
+	//building 10
+	rect(866, 254, 100, height-254);
+	rect(856, 271 , 30, height-271);
+	rect(878, 244, 30, 30);
+	rect(939, 223, 15, 40);
+	rect(942, 190, 5, 40);
+	//building 11
+	rect(960, 171, 80, height-171);
+	rect(978, 155, 50, 50);
+}
+
+function drawBatCharAndCar()
 {	
 
 	if(batCar.isReached)
@@ -284,16 +340,18 @@ function drawGameOver()
 {
 	fill(0);
 	textSize(75);
-	text("Game Over", 250, height/2-100);
+	text("Game Over", 270, height/2-100);
 
 	if(batLives>0)
 	{
 		text("You Win!", 300, height/2);
-		text("Your Score: " + gameScore, 200, height/2+80);
+		textSize(50);
+		text("Your Score: " + gameScore, 300, height/2+80);
 	}
 	else
 	{
 		text("You Lose!", 300, height/2);
-		text("Your Score: " + gameScore, 200, height/2+80);
+		textSize(50);
+		text("Your Score: " + gameScore, 300, height/2+80);
 	}
 }

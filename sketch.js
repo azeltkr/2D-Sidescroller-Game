@@ -80,7 +80,7 @@ class Raindrop
 {
 	this.y += this.speed;
 
-    if (this.y > floorPos_y) 
+    if (this.y > height) 
 	{
       // Reset raindrop if it reaches ground
       this.y = random(-200, -100);
@@ -96,16 +96,34 @@ class Raindrop
 }
 
 function draw()
-{
+{	
 	cameraPosX = batChar_x - width/2;
 	///////////DRAWING CODE//////////
 
-	background(19,24,98); //fill the night sky
-    
-	//draw some green ground
-	noStroke();
-	fill(0,155,0);
-	rect(0, floorPos_y, width, height - floorPos_y); 
+	// Define the gradient colors
+	var color1 = color(12,37,87);  //color(19,24,98);
+	var color2 = color(29,65,121);  //color(46,68,130);
+	var color3 = color(156,175,201);  //(84,107,171);
+
+	// Set the gradient background
+	background(0); // Set a default background color
+    for (var i = 0; i < height; i++) 
+	{
+        var inter1 = map(i, 0, height / 2, 0, 1);
+        var c1 = lerpColor(color1, color2, inter1);
+
+        var inter2 = map(i, height / 3, height, 0, 1);
+        var c2 = lerpColor(color2, color3, inter2);
+
+        // Combine the two gradients
+        var c = lerpColor(c1, c2, i / height);
+
+        stroke(c);
+        line(0, i, width, i);
+	}
+
+	//background buildings
+	drawBackgroundBuildings();
 
 	// Display and animate raindrops
 	for (var i = 0; i < raindrops.length; i++) 
@@ -113,6 +131,14 @@ function draw()
 		raindrops[i].fall();
 		raindrops[i].display();
 	}
+
+	//draw some green ground
+	noStroke();
+	fill(48,107,64);
+	rect(0, floorPos_y, width, height - floorPos_y);
+	fill(92,70,62);
+	rect(0, floorPos_y+20, width, height - floorPos_y+20); 
+
 	noStroke();
 
 	//draw game score
@@ -157,9 +183,6 @@ function draw()
     //draw the trees_x
 	drawTrees_x();
 
-	//Bat Boy Char and Bat Car
-	drawbatCharAndCar();
-
 	//draw collectable
 	for(var i=0;i<collectables.length;i++)
 	{
@@ -188,14 +211,18 @@ function draw()
 	//draw canyon
 	for(var i=0;i<canyons.length;i++)
 	{
-		fill(0,0,0);
+		fill(12,37,87);
 		rect(canyons[i].pos_x, floorPos_y, canyons[i].width, height-floorPos_y);
 		//NB. the canyon should go from ground-level to the bottom of the screen
 		//anchor point
 		fill(255,0,0);
 		ellipse(canyons[i].pos_x,floorPos_y,10,10);;
 	}
-    
+
+
+	//Bat Boy Char and Bat Car
+	drawBatCharAndCar();
+
 	pop();
 
 
