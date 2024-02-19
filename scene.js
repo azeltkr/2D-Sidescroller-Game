@@ -296,17 +296,7 @@ function drawBatCharAndCar()
 	}
 }
 
-function checkIfbatCharReachedBatCar()
-{
-	if(batCar.isReached==false)
-	{
-		var d = dist(batChar_x, batChar_y, batCar.pos_x, floorPos_y)
-		if(d<10)
-		{
-			batCar.isReached=true;
-		}
-	}
-}
+
 
 function checkIfBatCharDead()
 {

@@ -22,6 +22,32 @@ var batLives;
 var gameOver;
 
 var cameraPosX;
+var sound;
+
+function preload()
+{	
+	soundFormats("mp3", "wav");
+
+	//jump sound
+	jumpSound = loadSound("assets/jump.wav");
+	jumpSound.setVolume(0.4);
+
+	//collect sound
+	collectSound = loadSound("assets/itemequip.mp3");
+	collectSound.setVolume(0.4);
+
+	//falling sound
+	fallingSound = loadSound("assets/fallscream.mp3");
+	fallingSound.setVolume(0.4);
+
+	//car sound
+	carSound = loadSound("assets/carstart.mp3");
+	carSound.setVolume(0.4);
+
+	//footsteps sound
+	footstepSound = loadSound("assets/footsteps.mp3");
+	footstepSound.setVolume(0.4);
+}
 
 function setup()
 {
@@ -246,15 +272,23 @@ function draw()
 
 	if(isLeft == true)
 	{
-		batChar_x -= 5;
+		batChar_x -= 3;
 	}
 	else if(isRight == true)
 	{
-		batChar_x += 5;
+		batChar_x += 3;
 	}
 
 	//check if char has reached bat car
-	checkIfbatCharReachedBatCar();
+	if(batCar.isReached==false)
+	{
+		var d = dist(batChar_x, batChar_y, batCar.pos_x, floorPos_y)
+		if(d<10)
+		{	
+			carSound.play();
+			batCar.isReached=true;
+		}
+	}
 
 	//check if char is in range of collectable
 	for(var i=0;i<collectables.length;i++)
@@ -263,7 +297,8 @@ function draw()
 		{
 			var d = dist(batChar_x,batChar_y,collectables[i].pos_x,collectables[i].pos_y);
 			if(d<30)
-			{
+			{	
+				collectSound.play();
 				collectables[i].isFound = true;
 				//increment the game score
 				gameScore+=10;
@@ -284,6 +319,7 @@ function draw()
 		//check if game char is over the canyon
 		if(cond1 && cond2 && cond3)
 		{
+			fallingSound.play();
 			isPlummeting=true;
 		};
 	};
@@ -316,18 +352,22 @@ function keyPressed()
 	{
 		console.log("left arrow");
 		isLeft = true;
+		footstepSound.loop(); 
 	}
 	else if(keyCode == 39)
 	{
 		console.log("right arrow")
 		isRight = true;
+		footstepSound.loop(); 
 	}
 	else if(keyCode == 38)
 	{
 		if(batChar_y>=floorPos_y)
-		{
+		{	
+			jumpSound.play();
 			console.log("up arrow");
 			batChar_y -= 50;
+			footstepSound.stop(); // stops footsteps sound if char jumps
 		}
 	}
 }
@@ -348,11 +388,19 @@ function keyReleased()
 	{
 		console.log("left arrow");
 		isLeft = false;
+		if (batChar_y >= floorPos_y) 
+		{
+			footstepSound.stop(); // stop only if the character is on the ground
+		}
 	}
 	else if(keyCode == 39)
 	{
 		console.log("right arrow");
 		isRight = false;
+		if (batChar_y >= floorPos_y) 
+		{
+			footstepSound.stop(); // stop only if the character is on the ground
+		} 
 	}
 }
 
