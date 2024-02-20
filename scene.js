@@ -1,21 +1,56 @@
-var mountains;
+var buildings;
 var trees_x;
 var clouds;
 var raindrops;
+var buildingColors;
+var platforms;
 
 function setupScene()
 {
-    trees_x = [200, 400, 750];
+    trees_x = [200, 400, 1000];
 
 	clouds = [{pos_x:random(10,width),pos_y:random(20,100),size:random(50,80)},
-	{pos_x:random(10,width),pos_y:random(100,200),size:random(50,80)},
-	{pos_x:random(10,width),pos_y:random(200,250),size:random(50,80)}];
+	{pos_x:random(10,width),pos_y:random(100,150),size:random(50,80)},
+	{pos_x:random(10,width),pos_y:random(200,130),size:random(50,80)}];
 
-	mountains = [{pos_x:300,pos_y:floorPos_y-125,height:250,width:150},
-	{pos_x:550,pos_y:floorPos_y-75,height:150,width:100},
-	{pos_x:425,pos_y:floorPos_y-175,height:350,width:200}];
+	buildings = [{pos_x:215,pos_y:floorPos_y-330,height:455,width:265},
+	{pos_x:925,pos_y:floorPos_y-280,height:255,width:265},
+	{pos_x:1400,pos_y:floorPos_y-310,height:375,width:265}];
+
+	buildingColors = [color(168, 202, 226), color(189,206,169), color(147, 127, 97)];
 
 }
+
+//define the behavior of individual raindrop
+class Raindrop 
+{
+	constructor(x, y) 
+	{
+		this.x = x;
+		this.y = y;
+		this.length = 10;
+		this.speed = 5;
+	}
+
+	fall()
+{
+	this.y += this.speed;
+
+    if (this.y > height) 
+	{
+      // Reset raindrop if it reaches ground
+      this.y = random(-200, -100);
+      this.x = random(0, width);
+    }
+}
+
+	display()
+	{
+		stroke(150, 200, 255);
+		line(this.x, this.y, this.x, this.y + this.length);
+	}
+}
+
 function drawRaindrops()
 {
     // Display and animate raindrops
@@ -56,15 +91,26 @@ function animateClouds()
 	}
 }
 
-function drawMountains()
+function drawBuildings()
 {
-    for(var i=0;i<mountains.length;i++)
-	{
-		fill(112, 67, 64);
-		triangle(mountains[i].pos_x - mountains[i].width/2, mountains[i].pos_y + mountains[i].height/2, mountains[i].pos_x, mountains[i].pos_y - mountains[i].height/2, mountains[i].pos_x + mountains[i].width/2, mountains[i].pos_y + mountains[i].height/2);
-		//anchor point
+    for(var i=0;i<buildings.length;i++)
+	{	
+
+		fill(buildingColors[i % buildingColors.length]);
+		rect(buildings[i].pos_x, buildings[i].pos_y, buildings[i].width, buildings[i].pos_y+buildings[i].height/2);
+		//nested loop for building windows
+        for (var row = 0; row < 4; row++) 
+		{ // adjust the number of rows
+            for (var col = 0; col < 5; col++) 
+			{ 
+                fill(216,228,233); // color of the windows
+                var windowX = buildings[i].pos_x + 17.5 + col * 50; // adjust the spacing between windows horizontally
+                var windowY = buildings[i].pos_y + 20 + row * 50; // adjust the spacing between windows vertically
+                rect(windowX, windowY, 30, 30); // adjust the size of the windows
+            }
+        }
 		fill(255,0,0);
-		ellipse(mountains[i].pos_x,mountains[i].pos_y,10,10);
+		ellipse(buildings[i].pos_x,buildings[i].pos_y,10,10);
 	}
 }
 
@@ -218,8 +264,32 @@ function drawBatCharAndCar()
 		fill(255,0,0);
 		ellipse(batCar.pos_x,batCar.pos_y,10,10);
 
-			//the game character
-		if(isLeft && isFalling)
+		//the game character
+		if(onPlatform && isLeft)
+		{
+			// add your walking left code
+			fill(192,192,192);
+			ellipse(batChar_x+7,batChar_y-25,30,55); //char body
+			ellipse(batChar_x+7,batChar_y-60,20); //char head
+			fill(0);
+			ellipse(batChar_x-2.5,batChar_y-62,3.2,6.5); //right eye
+			ellipse(batChar_x+2,batChar_y-62,3.5,7); //left eye
+			fill(255,0,0);
+			ellipse(batChar_x,batChar_y,10,10);
+		}
+		else if(onPlatform && isRight)
+		{
+			// add your walking right code
+			fill(192,192,192);
+			ellipse(batChar_x-7,batChar_y-25,30,55); //char body
+			ellipse(batChar_x-7,batChar_y-60,20); //char head
+			fill(0);
+			ellipse(batChar_x-2.5,batChar_y-62,3.5,7); //right eye
+			ellipse(batChar_x+2,batChar_y-62,3.2,6.5); //left eye
+			fill(255,0,0);
+			ellipse(batChar_x,batChar_y,10,10);
+		}
+		else if(isLeft && isFalling)
 		{
 			// add your jumping-left code
 			fill(192,192,192);
@@ -264,6 +334,18 @@ function drawBatCharAndCar()
 			fill(0);
 			ellipse(batChar_x-2.5,batChar_y-62,3.5,7); //right eye
 			ellipse(batChar_x+2,batChar_y-62,3.2,6.5); //left eye
+			fill(255,0,0);
+			ellipse(batChar_x,batChar_y,10,10);
+		}
+		else if(onPlatform)
+		{
+			// add your standing front facing code
+			fill(192,192,192);
+			ellipse(batChar_x,batChar_y-25,35,55); //char body
+			ellipse(batChar_x,batChar_y-60,20); //char head
+			fill(0);
+			ellipse(batChar_x-3,batChar_y-62,3.5,7); //left eye
+			ellipse(batChar_x+3,batChar_y-62,3.5,7); //right eye
 			fill(255,0,0);
 			ellipse(batChar_x,batChar_y,10,10);
 		}
@@ -343,5 +425,69 @@ function drawGameOver()
 		text("You Lose!", 300, height/2);
 		textSize(50);
 		text("Your Score: " + gameScore, 300, height/2+80);
+	}
+}
+
+function Platform(pos_x, pos_y, length, color)
+{
+    this.pos_x = pos_x;
+    this.pos_y = pos_y;
+    this.length = length;
+	this.color = color;
+    this.draw = function()
+    {
+		fill(color);
+        rect(this.pos_x, this.pos_y, this.length, 20);
+    }
+
+    this.checkForContact = function(batChar_x, batChar_y)
+    {
+        //check x-axis
+        if(batChar_x + 20 > this.pos_x && batChar_x< this.pos_x + this.length)
+        {
+            //check y-axis - bat char is on platform
+            var d = this.pos_y - batChar_y;
+            if(d>=0 && d<1)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
+function createPlatform(pos_x, pos_y, length, color)
+{
+	return new Platform(pos_x, pos_y, length, color);
+}
+
+function drawPlatforms()
+{
+	for(var i = 0; i < platforms.length; i++)
+	{
+		platforms[i].draw();
+	}
+}
+
+function checkIfBatCharIsunderAnyPlatforms()
+{
+	if(isFalling)
+	{
+		var isInContact = false;
+		onPlatform = false;
+		for(var i = 0; i < platforms.length; i++)
+		{ 
+			isInContact = platforms[i].checkForContact(batChar_x, batChar_y);
+			if(isInContact)
+			{
+				onPlatform = true;
+				break;
+			}
+		}
+
+		if(!isInContact)
+		{
+			batChar_y += 1.3;
+		}
 	}
 }

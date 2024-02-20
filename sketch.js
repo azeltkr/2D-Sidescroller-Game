@@ -21,6 +21,9 @@ var gameScore;
 var batLives;
 var gameOver;
 
+var platforms;
+var onPlatform;
+
 var cameraPosX;
 var sound;
 
@@ -28,23 +31,23 @@ function preload()
 {	
 	soundFormats("mp3", "wav");
 
-	//jump sound
+	//jump sound: https://freesound.org/people/cabled_mess/sounds/350905/
 	jumpSound = loadSound("assets/jump.wav");
 	jumpSound.setVolume(0.4);
 
-	//collect sound
+	//collect sound: https://pixabay.com/sound-effects/search/item%20equip/
 	collectSound = loadSound("assets/itemequip.mp3");
 	collectSound.setVolume(0.4);
 
-	//falling sound
+	//falling sound: https://freesound.org/people/deleted_user_3330286/sounds/188565/
 	fallingSound = loadSound("assets/fallscream.mp3");
-	fallingSound.setVolume(0.4);
+	fallingSound.setVolume(0.3);
 
-	//car sound
+	//car sound: https://www.youtube.com/watch?v=ss8Qw_aOjJg
 	carSound = loadSound("assets/carstart.mp3");
 	carSound.setVolume(0.4);
 
-	//footsteps sound
+	//footsteps sound: https://www.fesliyanstudios.com/royalty-free-sound-effects-download/footsteps-on-grass-284
 	footstepSound = loadSound("assets/footsteps.mp3");
 	footstepSound.setVolume(0.4);
 }
@@ -52,10 +55,6 @@ function preload()
 function setup()
 {
 	createCanvas(1024, 576);
-	//init lives
-	batLives = 3;
-	//init gameOver is false
-	gameOver = false;
 	init();
 }
 function init()
@@ -69,19 +68,26 @@ function init()
 
 	gameScore = 0;
 	raindrops = [];
+	platforms = [];
 
 	isLeft = false;
 	isRight = false;
 	isFalling = false;
 	isPlummeting = false;
-	
+	onPlatform = false;
+
+	//init lives
+	batLives = 3;
+	//init gameOver is false
+	gameOver = false;
+
 	cameraPosX = 0;
 
 	collectables = [{pos_x:100, pos_y:floorPos_y-16, size:40, isFound:false},
-		{pos_x:200, pos_y:floorPos_y-16, size:40, isFound:false},
-		{pos_x:1000, pos_y:floorPos_y-16, size:40, isFound:false}];
+		{pos_x:1100, pos_y:floorPos_y-16, size:40, isFound:false}, 
+		{pos_x:1050, pos_y:floorPos_y-300, size:40, isFound:false}];
 
-	canyons = [{pos_x:600, width:100},{pos_x:800, width:100}];
+	canyons = [{pos_x:600, width:300},{pos_x:1200, width:100}];
 	batCar = {pos_x: 2500, pos_y: floorPos_y-40, isReached: false};
 	
 	// Initialize raindrops
@@ -89,36 +95,10 @@ function init()
 	{
 		raindrops.push(new Raindrop(random(width), random(height)));
 	}
-}
 
-//define the behavior of individual raindrop
-class Raindrop 
-{
-	constructor(x, y) 
-	{
-		this.x = x;
-		this.y = y;
-		this.length = 10;
-		this.speed = 5;
-	}
-
-	fall()
-{
-	this.y += this.speed;
-
-    if (this.y > height) 
-	{
-      // Reset raindrop if it reaches ground
-      this.y = random(-200, -100);
-      this.x = random(0, width);
-    }
-}
-
-	display()
-	{
-		stroke(150, 200, 255);
-		line(this.x, this.y, this.x, this.y + this.length);
-	}
+	platforms.push(createPlatform(600, floorPos_y-100, 100, color(0)));
+	platforms.push(createPlatform(750, floorPos_y-200, 100, color(0)));
+	platforms.push(createPlatform(925, floorPos_y-280, 265, color(255, 0, 0, 0)));
 }
 
 function draw()
@@ -126,13 +106,13 @@ function draw()
 	cameraPosX = batChar_x - width/2;
 	///////////DRAWING CODE//////////
 
-	// Define the gradient colors
-	var color1 = color(12,37,87);  //color(19,24,98);
-	var color2 = color(29,65,121);  //color(46,68,130);
-	var color3 = color(156,175,201);  //(84,107,171);
+	// define the gradient colors
+	var color1 = color(12,37,87);  
+	var color2 = color(29,65,121);  
+	var color3 = color(156,175,201);  
 
-	// Set the gradient background
-	background(0); // Set a default background color
+	// set the gradient background
+	background(0); // set a default background color
     for (var i = 0; i < height; i++) 
 	{
         var inter1 = map(i, 0, height / 2, 0, 1);
@@ -141,7 +121,7 @@ function draw()
         var inter2 = map(i, height / 3, height, 0, 1);
         var c2 = lerpColor(color2, color3, inter2);
 
-        // Combine the two gradients
+        // combine the two gradients
         var c = lerpColor(c1, c2, i / height);
 
         stroke(c);
@@ -151,12 +131,8 @@ function draw()
 	//background buildings
 	drawBackgroundBuildings();
 
-	// Display and animate raindrops
-	for (var i = 0; i < raindrops.length; i++) 
-	{
-		raindrops[i].fall();
-		raindrops[i].display();
-	}
+	//display and animate raindrops
+	drawRaindrops();
 
 	//draw some green ground
 	noStroke();
@@ -194,12 +170,13 @@ function draw()
 
 	//animate clouds
 	animateClouds();
-    
+
     //draw the mountains
-	drawMountains();
+	drawBuildings();
     
-    //draw the trees_x
+	//draw the trees_x
 	drawTrees_x();
+
 
 	//draw collectable
 	for(var i=0;i<collectables.length;i++)
@@ -237,6 +214,8 @@ function draw()
 		ellipse(canyons[i].pos_x,floorPos_y,10,10);;
 	}
 
+	drawPlatforms();
+
 
 	//Bat Boy Char and Bat Car
 	drawBatCharAndCar();
@@ -244,17 +223,37 @@ function draw()
 	pop();
 
 
+	//check if char is over the canyon
+	for(var i=0;i<canyons.length;i++)
+	{	
+		//check if char is on the ground
+		var cond1 = batChar_y >= floorPos_y;
+		//check if char is at the left side of canyon
+		var cond2 = batChar_x - batChar_width/2 > canyons[i].pos_x;
+		//check if char is at the right side of canyon
+		var cond3 = batChar_x + batChar_width/2 <  canyons[i].pos_x+canyons[i].width;
+
+		//check if game char is over the canyon
+		if(cond1 && cond2 && cond3)
+		{
+			isPlummeting=true;
+		};
+	};
+
+	//call checkIfBatCharIsunderAnyPlatforms()
+	checkIfBatCharIsunderAnyPlatforms();
+
 	///////////INTERACTION CODE//////////
 	//Put conditional statements to move the game character below here
 	if(isPlummeting)
-	{
-		batChar_y += 10;
+	{	
+		fallingSound.play();
+		batChar_y += 15;
 		return;
 	}
 
 	if(batChar_y<floorPos_y)
 	{
-		batChar_y += 1;
 		isFalling = true;
 	}
 	else 
@@ -297,25 +296,7 @@ function draw()
 			};
 		}
 	}
-
-	//check if char is over the canyon
-	for(var i=0;i<canyons.length;i++)
-	{
-		//check if char is on the ground
-		var cond1 = batChar_y == floorPos_y;
-		//check if char is at the left side of canyon
-		var cond2 = batChar_x - batChar_width/2>(canyons[i].pos_x);
-		//check if char is at the right side of canyon
-		var cond3 = batChar_x + batChar_width/2<(canyons[i].pos_x+canyons[i].width);
-
-		//check if game char is over the canyon
-		if(cond1 && cond2 && cond3)
-		{
-			fallingSound.play();
-			isPlummeting=true;
-		};
-	};
-
+	
 	//draw game score
 	fill(255,255,255);
 	textSize(30);
@@ -352,22 +333,28 @@ function keyPressed()
 	{
 		console.log("left arrow");
 		isLeft = true;
-		footstepSound.loop(); 
+		if(batChar_y==floorPos_y)
+		{
+			footstepSound.loop(); 
+		}
 	}
 	else if(keyCode == 39)
 	{
 		console.log("right arrow")
 		isRight = true;
-		footstepSound.loop(); 
+		if(batChar_y==floorPos_y)
+		{
+			footstepSound.loop(); 
+		} 
 	}
 	else if(keyCode == 38)
 	{
-		if(batChar_y>=floorPos_y)
+		if(batChar_y>=floorPos_y || onPlatform)
 		{	
+			footstepSound.stop(); // stops footsteps sound if char jumps
 			jumpSound.play();
 			console.log("up arrow");
-			batChar_y -= 50;
-			footstepSound.stop(); // stops footsteps sound if char jumps
+			batChar_y -= 150;
 		}
 	}
 }
