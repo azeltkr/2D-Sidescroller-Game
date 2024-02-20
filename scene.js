@@ -7,7 +7,7 @@ var platforms;
 
 function setupScene()
 {
-    trees_x = [200, 400, 1000];
+    trees_x = [200, 400, 1000, 1450, 1650, 2300];
 
 	clouds = [{pos_x:random(10,width),pos_y:random(20,100),size:random(50,80)},
 	{pos_x:random(10,width),pos_y:random(100,150),size:random(50,80)},

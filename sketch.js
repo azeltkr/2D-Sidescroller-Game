@@ -41,7 +41,7 @@ function preload()
 
 	//falling sound: https://freesound.org/people/deleted_user_3330286/sounds/188565/
 	fallingSound = loadSound("assets/fallscream.mp3");
-	fallingSound.setVolume(0.3);
+	fallingSound.setVolume(0.15);
 
 	//car sound: https://www.youtube.com/watch?v=ss8Qw_aOjJg
 	carSound = loadSound("assets/carstart.mp3");
@@ -55,6 +55,10 @@ function preload()
 function setup()
 {
 	createCanvas(1024, 576);
+	//init lives
+	batLives = 3;
+	//init gameOver is false
+	gameOver = false;
 	init();
 }
 function init()
@@ -76,18 +80,17 @@ function init()
 	isPlummeting = false;
 	onPlatform = false;
 
-	//init lives
-	batLives = 3;
-	//init gameOver is false
-	gameOver = false;
-
 	cameraPosX = 0;
 
 	collectables = [{pos_x:100, pos_y:floorPos_y-16, size:40, isFound:false},
+		{pos_x:400, pos_y:floorPos_y-185, size:40, isFound:false},
 		{pos_x:1100, pos_y:floorPos_y-16, size:40, isFound:false}, 
-		{pos_x:1050, pos_y:floorPos_y-300, size:40, isFound:false}];
+		{pos_x:1050, pos_y:floorPos_y-300, size:40, isFound:false},
+		{pos_x:1450, pos_y:floorPos_y-330, size:40, isFound:false},
+		{pos_x:1600, pos_y:floorPos_y-16, size:40, isFound:false},
+		{pos_x:2300, pos_y:floorPos_y-185, size:40, isFound:false}];
 
-	canyons = [{pos_x:600, width:300},{pos_x:1200, width:100}];
+	canyons = [{pos_x:600, width:300},{pos_x:1200, width:100},{pos_x:1800, width:375}];
 	batCar = {pos_x: 2500, pos_y: floorPos_y-40, isReached: false};
 	
 	// Initialize raindrops
@@ -98,7 +101,12 @@ function init()
 
 	platforms.push(createPlatform(600, floorPos_y-100, 100, color(0)));
 	platforms.push(createPlatform(750, floorPos_y-200, 100, color(0)));
+	platforms.push(createPlatform(380, floorPos_y-160, 40, color(255, 0, 0, 0)));
 	platforms.push(createPlatform(925, floorPos_y-280, 265, color(255, 0, 0, 0)));
+	platforms.push(createPlatform(1400, floorPos_y-310, 265, color(255, 0, 0, 0)));
+	platforms.push(createPlatform(1900, floorPos_y-100, 230, color(0)));
+	platforms.push(createPlatform(2280, floorPos_y-160, 40, color(255, 0, 0, 0)));
+
 }
 
 function draw()
@@ -163,13 +171,14 @@ function draw()
 		return;
 	}
 
-    push();
-	translate(-cameraPosX, 0);
-    //draw the clouds
+	//draw the clouds
 	drawClouds();
 
 	//animate clouds
 	animateClouds();
+
+    push();
+	translate(-cameraPosX, 0);
 
     //draw the mountains
 	drawBuildings();
@@ -333,7 +342,7 @@ function keyPressed()
 	{
 		console.log("left arrow");
 		isLeft = true;
-		if(batChar_y==floorPos_y)
+		if(batChar_y==floorPos_y || !onPlatform)
 		{
 			footstepSound.loop(); 
 		}
@@ -342,7 +351,7 @@ function keyPressed()
 	{
 		console.log("right arrow")
 		isRight = true;
-		if(batChar_y==floorPos_y)
+		if(batChar_y==floorPos_y || !onPlatform)
 		{
 			footstepSound.loop(); 
 		} 
@@ -375,7 +384,7 @@ function keyReleased()
 	{
 		console.log("left arrow");
 		isLeft = false;
-		if (batChar_y >= floorPos_y) 
+		if (batChar_y > floorPos_y || !onPlatform) 
 		{
 			footstepSound.stop(); // stop only if the character is on the ground
 		}
@@ -384,7 +393,7 @@ function keyReleased()
 	{
 		console.log("right arrow");
 		isRight = false;
-		if (batChar_y >= floorPos_y) 
+		if (batChar_y > floorPos_y || !onPlatform) 
 		{
 			footstepSound.stop(); // stop only if the character is on the ground
 		} 
