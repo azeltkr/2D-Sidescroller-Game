@@ -4,6 +4,7 @@ var clouds;
 var raindrops;
 var buildingColors;
 var platforms;
+var badGuys;
 
 function setupScene()
 {
@@ -488,6 +489,78 @@ function checkIfBatCharIsunderAnyPlatforms()
 		if(!isInContact)
 		{
 			batChar_y += 1.3;
+		}
+	}
+}
+
+function badGuy(pos_x, pos_y, range)
+{
+	this.pos_x = pos_x;
+	this.pos_y = pos_y;
+	this.range = range;
+
+	this.currentX = pos_x;
+	this.inc = 1;
+
+	this.update = function()
+	{
+		this.currentX += this.inc;
+		if(this.currentX > this.pos_x + this.range)
+		{
+			this.inc = -1;
+		}
+		else if(this.currentX < this.pos_x)
+		{
+			this.inc = 1;
+		}
+	}
+
+	this.draw = function()
+	{
+		this.update();
+		fill(255, 0, 0);
+		ellipse(this.currentX, this.pos_y, 20, 20);
+	}
+
+	this.checkForContact = function(batChar_x, batChar_y)
+	{
+		var d = dist(batChar_x, batChar_y, this.currentX, this.pos_y);
+		if(d<20)
+		{
+			return true;
+		}
+		return false;
+	}
+}
+
+function createBadGuy(pos_x, pos_y, range)
+{
+	return new badGuy(pos_x, pos_y, range);
+}
+
+function drawBadGuys()
+{
+	// draw enemies
+	for(var i = 0; i < badGuys.length; i++)
+	{
+		badGuys[i].draw();
+	}
+}
+
+function checkIfBatCharHitByBadGuy()
+{
+	if(hitByBadGuy)
+	{
+		return;
+	}
+
+	for(var i = 0; i < badGuys.length; i++)
+	{
+		var isInContact = badGuys[i].checkForContact(batChar_x, batChar_y);
+		if(isInContact)
+		{
+			hitByBadGuy = true;
+			break;
 		}
 	}
 }

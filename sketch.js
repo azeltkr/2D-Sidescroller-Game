@@ -24,6 +24,9 @@ var gameOver;
 var platforms;
 var onPlatform;
 
+var badGuys;
+var hitByBadGuy;
+
 var cameraPosX;
 var sound;
 
@@ -73,12 +76,14 @@ function init()
 	gameScore = 0;
 	raindrops = [];
 	platforms = [];
+	badGuys = [];
 
 	isLeft = false;
 	isRight = false;
 	isFalling = false;
 	isPlummeting = false;
 	onPlatform = false;
+	hitByBadGuy = false;
 
 	cameraPosX = 0;
 
@@ -107,7 +112,10 @@ function init()
 	platforms.push(createPlatform(1900, floorPos_y-100, 230, color(0)));
 	platforms.push(createPlatform(2280, floorPos_y-160, 40, color(255, 0, 0, 0)));
 
+	badGuys.push(createBadGuy(200, floorPos_y-10, 180));
+	badGuys.push(createBadGuy(980, floorPos_y-10, 180));
 }
+
 
 function draw()
 {	
@@ -222,9 +230,12 @@ function draw()
 		fill(255,0,0);
 		ellipse(canyons[i].pos_x,floorPos_y,10,10);;
 	}
-
+	
+	//draw the platforms
 	drawPlatforms();
 
+	//draw the bad guys
+	drawBadGuys();
 
 	//Bat Boy Char and Bat Car
 	drawBatCharAndCar();
@@ -252,8 +263,22 @@ function draw()
 	//call checkIfBatCharIsunderAnyPlatforms()
 	checkIfBatCharIsunderAnyPlatforms();
 
+	//call checkIfBatCharHitByBadGuy()
+	checkIfBatCharHitByBadGuy();
+
 	///////////INTERACTION CODE//////////
 	//Put conditional statements to move the game character below here
+	if(hitByBadGuy)
+	{	
+		fill(0);
+		textSize(75);
+		text("Game Over", 270, height/2-100);
+		text("You Lose!", 300, height/2);
+		textSize(50);
+		text("Your Score: " + gameScore, 300, height/2+80);
+		return;
+	}
+
 	if(isPlummeting)
 	{	
 		fallingSound.play();
@@ -278,6 +303,8 @@ function draw()
 	{
 		batChar_x += 3;
 	}
+
+
 
 	//check if char has reached bat car
 	if(batCar.isReached==false)
