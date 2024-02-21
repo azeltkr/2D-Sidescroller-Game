@@ -114,6 +114,7 @@ function init()
 
 	badGuys.push(createBadGuy(200, floorPos_y-10, 180));
 	badGuys.push(createBadGuy(980, floorPos_y-10, 180));
+	badGuys.push(createBadGuy(925, floorPos_y-290, 180));
 }
 
 
@@ -270,13 +271,18 @@ function draw()
 	//Put conditional statements to move the game character below here
 	if(hitByBadGuy)
 	{	
-		fill(0);
-		textSize(75);
-		text("Game Over", 270, height/2-100);
-		text("You Lose!", 300, height/2);
-		textSize(50);
-		text("Your Score: " + gameScore, 300, height/2+80);
-		return;
+		//decrease life
+		batLives--;
+
+		//restart game if there are still lives
+		if(batLives > 0)
+		{
+			init();
+		}
+		else
+		{
+			gameOver = true;
+		}
 	}
 
 	if(isPlummeting)
