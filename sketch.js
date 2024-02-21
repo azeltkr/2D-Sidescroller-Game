@@ -105,17 +105,18 @@ function init()
 		raindrops.push(new Raindrop(random(width), random(height)));
 	}
 
-	platforms.push(createPlatform(485, floorPos_y-140, 50, color(0)));
-	platforms.push(createPlatform(600, floorPos_y-100, 100, color(0)));
-	platforms.push(createPlatform(750, floorPos_y-200, 100, color(0)));
+	platforms.push(createPlatform(485, floorPos_y-140, 50, color(48,107,64)));
+	platforms.push(createPlatform(600, floorPos_y-100, 100, color(48,107,64)));
+	platforms.push(createPlatform(770, floorPos_y-20, 50, color(48,107,64)));
+	platforms.push(createPlatform(750, floorPos_y-200, 100, color(48,107,64)));
 	platforms.push(createPlatform(180, floorPos_y-160, 40, color(255, 0, 0, 0))); //left tree platform
 	platforms.push(createPlatform(380, floorPos_y-160, 40, color(255, 0, 0, 0)));
 	platforms.push(createPlatform(925, floorPos_y-280, 265, color(255, 0, 0, 0)));
 	platforms.push(createPlatform(1400, floorPos_y-310, 265, color(255, 0, 0, 0)));
-	platforms.push(createPlatform(1870, floorPos_y-100, 250, color(0)));
+	platforms.push(createPlatform(1870, floorPos_y-100, 250, color(48,107,64)));
 	platforms.push(createPlatform(2280, floorPos_y-160, 40, color(255, 0, 0, 0)));
-	platforms.push(createPlatform(2180, floorPos_y-140, 40, color(0)));
-	platforms.push(createPlatform(1270, floorPos_y-250, 40, color(0)));
+	platforms.push(createPlatform(2180, floorPos_y-140, 40, color(48,107,64)));
+	platforms.push(createPlatform(1270, floorPos_y-250, 40, color(48,107,64)));
 	
 	badGuys.push(createBadGuy(200, floorPos_y-10, 180));
 	badGuys.push(createBadGuy(980, floorPos_y-10, 180));

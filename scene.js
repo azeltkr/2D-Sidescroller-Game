@@ -438,7 +438,7 @@ function Platform(pos_x, pos_y, length, color)
     this.draw = function()
     {
 		fill(color);
-        rect(this.pos_x, this.pos_y, this.length, 20);
+        rect(this.pos_x, this.pos_y, this.length, 30, 12);
     }
 
     this.checkForContact = function(batChar_x, batChar_y)
