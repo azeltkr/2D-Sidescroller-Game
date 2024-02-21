@@ -448,7 +448,7 @@ function Platform(pos_x, pos_y, length, color)
         {
             //check y-axis - bat char is on platform
             var d = this.pos_y - batChar_y;
-            if(d>=0 && d<1)
+            if(d>=0 && d<2)
             {
                 return true;
             }
@@ -488,7 +488,7 @@ function checkIfBatCharIsunderAnyPlatforms()
 
 		if(!isInContact)
 		{
-			batChar_y += 1.3;
+			batChar_y += 2;
 		}
 	}
 }
@@ -507,11 +507,11 @@ function badGuy(pos_x, pos_y, range)
 		this.currentX += this.inc;
 		if(this.currentX > this.pos_x + this.range)
 		{
-			this.inc = -2;
+			this.inc = -1.5;
 		}
 		else if(this.currentX < this.pos_x)
 		{
-			this.inc = 2;
+			this.inc = 1.5;
 		}
 	}
 

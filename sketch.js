@@ -88,6 +88,7 @@ function init()
 	cameraPosX = 0;
 
 	collectables = [{pos_x:100, pos_y:floorPos_y-16, size:40, isFound:false},
+		{pos_x:200, pos_y:floorPos_y-185, size:40, isFound:false},
 		{pos_x:400, pos_y:floorPos_y-185, size:40, isFound:false},
 		{pos_x:1100, pos_y:floorPos_y-16, size:40, isFound:false}, 
 		{pos_x:1050, pos_y:floorPos_y-300, size:40, isFound:false},
@@ -104,17 +105,22 @@ function init()
 		raindrops.push(new Raindrop(random(width), random(height)));
 	}
 
+	platforms.push(createPlatform(485, floorPos_y-140, 50, color(0)));
 	platforms.push(createPlatform(600, floorPos_y-100, 100, color(0)));
 	platforms.push(createPlatform(750, floorPos_y-200, 100, color(0)));
+	platforms.push(createPlatform(180, floorPos_y-160, 40, color(255, 0, 0, 0))); //left tree platform
 	platforms.push(createPlatform(380, floorPos_y-160, 40, color(255, 0, 0, 0)));
 	platforms.push(createPlatform(925, floorPos_y-280, 265, color(255, 0, 0, 0)));
 	platforms.push(createPlatform(1400, floorPos_y-310, 265, color(255, 0, 0, 0)));
-	platforms.push(createPlatform(1900, floorPos_y-100, 230, color(0)));
+	platforms.push(createPlatform(1870, floorPos_y-100, 250, color(0)));
 	platforms.push(createPlatform(2280, floorPos_y-160, 40, color(255, 0, 0, 0)));
-
+	platforms.push(createPlatform(2180, floorPos_y-140, 40, color(0)));
+	platforms.push(createPlatform(1270, floorPos_y-250, 40, color(0)));
+	
 	badGuys.push(createBadGuy(200, floorPos_y-10, 180));
 	badGuys.push(createBadGuy(980, floorPos_y-10, 180));
 	badGuys.push(createBadGuy(925, floorPos_y-290, 180));
+	badGuys.push(createBadGuy(1900, floorPos_y-110, 180)); 
 }
 
 
@@ -397,6 +403,7 @@ function keyPressed()
 			jumpSound.play();
 			console.log("up arrow");
 			batChar_y -= 150;
+			isFalling = true;
 		}
 	}
 }
