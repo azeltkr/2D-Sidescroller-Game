@@ -507,11 +507,11 @@ function badGuy(pos_x, pos_y, range)
 		this.currentX += this.inc;
 		if(this.currentX > this.pos_x + this.range)
 		{
-			this.inc = -1;
+			this.inc = -2;
 		}
 		else if(this.currentX < this.pos_x)
 		{
-			this.inc = 1;
+			this.inc = 2;
 		}
 	}
 
