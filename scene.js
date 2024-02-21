@@ -257,6 +257,9 @@ function drawBatCharAndCar()
 		fill(32,32,32);
 		ellipse(batCar.pos_x-82, batCar.pos_y+11, 55);
 		ellipse(batCar.pos_x+90, batCar.pos_y+11, 55);
+		fill(169,169,169);
+		ellipse(batCar.pos_x-82, batCar.pos_y+11, 40);
+		ellipse(batCar.pos_x+90, batCar.pos_y+11, 40);
 		//windows
 		fill(192,192,192);
 		quad(batCar.pos_x-40, batCar.pos_y-25, batCar.pos_x-40, batCar.pos_y-43, batCar.pos_x+15,batCar.pos_y-43, batCar.pos_x+37, batCar.pos_y-25);
@@ -507,25 +510,48 @@ function badGuy(pos_x, pos_y, range)
 		this.currentX += this.inc;
 		if(this.currentX > this.pos_x + this.range)
 		{
-			this.inc = -1.5;
+			this.inc = -1.3;
 		}
 		else if(this.currentX < this.pos_x)
 		{
-			this.inc = 1.5;
+			this.inc = 1.3;
 		}
 	}
 
 	this.draw = function()
 	{
 		this.update();
-		fill(255, 0, 0);
-		ellipse(this.currentX, this.pos_y, 20, 20);
+		fill(30,93,136);
+		rectMode(CENTER);
+		rect(this.currentX, this.pos_y, 60, 20, 10);
+		fill(213,213,213);
+		rect(this.currentX, this.pos_y-25, 35, 35, 5);
+		fill(85,173,122);
+		ellipse(this.currentX, this.pos_y-47, 10);
+		//eyes
+		fill(51,77,92);
+		ellipse(this.currentX-6,this.pos_y-25, 6, 12); //left eye
+		ellipse(this.currentX+6,this.pos_y-25, 6, 12); //right eye
+		//arms
+		fill(35,41,46);
+		rect(this.currentX-25, this.pos_y-20, 15, 4);
+		rect(this.currentX+25, this.pos_y-20, 15, 4);
+		//left hand
+		fill(51,77,92);
+		ellipse(this.currentX-35, this.pos_y-20, 8);
+		ellipse(this.currentX-40,this.pos_y-23, 7, 3.5); 
+		ellipse(this.currentX-40,this.pos_y-17, 7, 3.5); 
+		//right hand
+		ellipse(this.currentX+35, this.pos_y-20, 8);
+		ellipse(this.currentX+40,this.pos_y-23, 7, 3.5); 
+		ellipse(this.currentX+40,this.pos_y-17, 7, 3.5);
+		rectMode(CORNER);
 	}
 
 	this.checkForContact = function(batChar_x, batChar_y)
 	{
 		var d = dist(batChar_x, batChar_y, this.currentX, this.pos_y);
-		if(d<20)
+		if(d<50)
 		{
 			return true;
 		}

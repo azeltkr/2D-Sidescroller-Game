@@ -120,7 +120,7 @@ function init()
 	
 	badGuys.push(createBadGuy(200, floorPos_y-10, 180));
 	badGuys.push(createBadGuy(980, floorPos_y-10, 180));
-	badGuys.push(createBadGuy(925, floorPos_y-290, 180));
+	badGuys.push(createBadGuy(960, floorPos_y-290, 180));
 	badGuys.push(createBadGuy(1900, floorPos_y-110, 180)); 
 }
 
