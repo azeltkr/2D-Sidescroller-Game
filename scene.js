@@ -215,6 +215,9 @@ function drawBatCharAndCar()
 		fill(32,32,32);
 		ellipse(batCar.pos_x-82, batCar.pos_y+11, 55);
 		ellipse(batCar.pos_x+90, batCar.pos_y+11, 55);
+		fill(169,169,169);
+		ellipse(batCar.pos_x-82, batCar.pos_y+11, 40);
+		ellipse(batCar.pos_x+90, batCar.pos_y+11, 40);
 		//windows
 		fill(192,192,192);
 		quad(batCar.pos_x-40, batCar.pos_y-25, batCar.pos_x-40, batCar.pos_y-43, batCar.pos_x+15,batCar.pos_y-43, batCar.pos_x+37, batCar.pos_y-25);
