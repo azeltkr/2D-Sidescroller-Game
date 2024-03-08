@@ -53,6 +53,9 @@ function preload()
 	//footsteps sound: https://www.fesliyanstudios.com/royalty-free-sound-effects-download/footsteps-on-grass-284
 	footstepSound = loadSound("assets/footsteps.mp3");
 	footstepSound.setVolume(0.4);
+
+	//Dark Conspiracy VGM
+	backgroundSound = loadSound("assets/");
 }
 
 function setup()
