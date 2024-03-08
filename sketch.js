@@ -30,6 +30,8 @@ var hitByBadGuy;
 var cameraPosX;
 var sound;
 
+let hasMusicPlayed = false;
+
 function preload()
 {	
 	soundFormats("mp3", "wav");
@@ -54,8 +56,9 @@ function preload()
 	footstepSound = loadSound("assets/footsteps.mp3");
 	footstepSound.setVolume(0.4);
 
-	//Dark Conspiracy VGM
-	backgroundSound = loadSound("assets/");
+	//Dark Conspiracy VGM https://www.youtube.com/watch?v=SY-49rIbOSc&list=PLobY7vO0pgVIOZNKTVRhkPzrfCjDJ0CNl&index=72
+	backgroundSound = loadSound("assets/music.mp3");
+	backgroundSound.setVolume(0.2);
 }
 
 function setup()
@@ -94,7 +97,7 @@ function init()
 		{pos_x:200, pos_y:floorPos_y-185, size:40, isFound:false},
 		{pos_x:400, pos_y:floorPos_y-185, size:40, isFound:false},
 		{pos_x:1100, pos_y:floorPos_y-16, size:40, isFound:false}, 
-		{pos_x:1050, pos_y:floorPos_y-300, size:40, isFound:false},
+		{pos_x:945, pos_y:floorPos_y-300, size:40, isFound:false},
 		{pos_x:1450, pos_y:floorPos_y-330, size:40, isFound:false},
 		{pos_x:1600, pos_y:floorPos_y-16, size:40, isFound:false},
 		{pos_x:2300, pos_y:floorPos_y-185, size:40, isFound:false}];
@@ -184,7 +187,7 @@ function draw()
 		fill(0);
 		ellipse(batChar_x-3,batChar_y-62,3.5,7); //left eye
 		ellipse(batChar_x+3,batChar_y-62,3.5,7); //right eye
-		fill(255,0,0);
+		fill(255,0,0,0);
 		ellipse(batChar_x,batChar_y,10,10);
 
 		return;
@@ -226,7 +229,7 @@ function draw()
 			vertex(collectables[i].pos_x+15, collectables[i].pos_y-6);
 			endShape();
 			//anchor point
-			fill(255,0,0);
+			fill(255,0,0,0);
 			ellipse(collectables[i].pos_x,collectables[i].pos_y,10,10);
 		}
 	}
@@ -238,7 +241,7 @@ function draw()
 		rect(canyons[i].pos_x, floorPos_y, canyons[i].width, height-floorPos_y);
 		//NB. the canyon should go from ground-level to the bottom of the screen
 		//anchor point
-		fill(255,0,0);
+		fill(255,0,0,0);
 		ellipse(canyons[i].pos_x,floorPos_y,10,10);;
 	}
 	
@@ -357,14 +360,6 @@ function draw()
 	//Bat life tokens
 	drawbatLives();
 
-	//mouse pointer coordinates
-	push();
-	fill(255,0,0);
-	stroke(255,0,0);
-	strokeWeight(1);
-	text(mouseX + ","+ mouseY, mouseX,mouseY);
-	pop();
-
 }
 
 
@@ -376,6 +371,14 @@ function keyPressed()
 	}
 	// if statements to control the animation of the character when
 	// keys are pressed.
+
+	if (keyIsPressed && !hasMusicPlayed) {
+		// Play the background sound
+		backgroundSound.play();
+		
+		// Set the flag to true to indicate that the sound has been played
+		hasMusicPlayed = true;
+	  }
 
 	//open up the console to see how these work
 	console.log("keyPressed: " + key);

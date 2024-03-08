@@ -75,7 +75,7 @@ function drawClouds()
 		ellipse(clouds[i].pos_x+57,clouds[i].pos_y+20, 28, 28);
 		ellipse(clouds[i].pos_x-57,clouds[i].pos_y+25, 32, 32);    
 		//anchor point
-		fill(255,0,0);
+		fill(255,0,0,0);
 		ellipse(clouds[i].pos_x,clouds[i].pos_y,10,10);
 	}
 }
@@ -110,7 +110,7 @@ function drawBuildings()
                 rect(windowX, windowY, 30, 30); // adjust the size of the windows
             }
         }
-		fill(255,0,0);
+		fill(255,0,0,0);
 		ellipse(buildings[i].pos_x,buildings[i].pos_y,10,10);
 	}
 }
@@ -132,7 +132,7 @@ function drawTrees_x()
 		ellipse(trees_x[i], floorPos_y-132, 65, 65);
 		ellipse(trees_x[i], floorPos_y-82, 50, 50);
 		//anchor point
-		fill(255,0,0);
+		fill(255,0,0,0);
 		ellipse(trees_x[i],floorPos_y-41,10,10);
 	}
 }
@@ -231,7 +231,7 @@ function drawBatCharAndCar()
 			ellipse(batCar.pos_x - 120 - i * 5, batCar.pos_y + 5, 10); // Adjust the x-position for each ellipse
 		}
 		//car anchor point
-		fill(255,0,0);
+		fill(255,0,0,0);
 		ellipse(batCar.pos_x,batCar.pos_y,10,10);
 		//animate car to move
 		batCar.pos_x += 3;
@@ -268,7 +268,7 @@ function drawBatCharAndCar()
 		quad(batCar.pos_x-40, batCar.pos_y-25, batCar.pos_x-40, batCar.pos_y-43, batCar.pos_x+15,batCar.pos_y-43, batCar.pos_x+37, batCar.pos_y-25);
 		triangle(batCar.pos_x-40, batCar.pos_y-25, batCar.pos_x-63, batCar.pos_y-35, batCar.pos_x-40, batCar.pos_y-43);
 		//car anchor point
-		fill(255,0,0);
+		fill(255,0,0,0);
 		ellipse(batCar.pos_x,batCar.pos_y,10,10);
 
 		//the game character
@@ -281,7 +281,7 @@ function drawBatCharAndCar()
 			fill(0);
 			ellipse(batChar_x-2.5,batChar_y-62,3.2,6.5); //right eye
 			ellipse(batChar_x+2,batChar_y-62,3.5,7); //left eye
-			fill(255,0,0);
+			fill(255,0,0,0);
 			ellipse(batChar_x,batChar_y,10,10);
 		}
 		else if(onPlatform && isRight)
@@ -293,7 +293,7 @@ function drawBatCharAndCar()
 			fill(0);
 			ellipse(batChar_x-2.5,batChar_y-62,3.5,7); //right eye
 			ellipse(batChar_x+2,batChar_y-62,3.2,6.5); //left eye
-			fill(255,0,0);
+			fill(255,0,0,0);
 			ellipse(batChar_x,batChar_y,10,10);
 		}
 		else if(isLeft && isFalling)
@@ -305,7 +305,7 @@ function drawBatCharAndCar()
 			fill(0);
 			ellipse(batChar_x-2.5,batChar_y-70,3.2,6.5); //right eye
 			ellipse(batChar_x+2,batChar_y-70,3.5,7); //left eye
-			fill(255,0,0);
+			fill(255,0,0,0);
 			ellipse(batChar_x,batChar_y,10,10);
 		}
 		else if(isRight && isFalling)
@@ -317,7 +317,7 @@ function drawBatCharAndCar()
 			fill(0);
 			ellipse(batChar_x-2.5,batChar_y-70,3.5,7); //right eye
 			ellipse(batChar_x+2,batChar_y-70,3.2,6.5); //left eye
-			fill(255,0,0);
+			fill(255,0,0,0);
 			ellipse(batChar_x,batChar_y,10,10);
 		}
 		else if(isLeft)
@@ -329,7 +329,7 @@ function drawBatCharAndCar()
 			fill(0);
 			ellipse(batChar_x-2.5,batChar_y-62,3.2,6.5); //right eye
 			ellipse(batChar_x+2,batChar_y-62,3.5,7); //left eye
-			fill(255,0,0);
+			fill(255,0,0,0);
 			ellipse(batChar_x,batChar_y,10,10);
 		}
 		else if(isRight)
@@ -341,7 +341,7 @@ function drawBatCharAndCar()
 			fill(0);
 			ellipse(batChar_x-2.5,batChar_y-62,3.5,7); //right eye
 			ellipse(batChar_x+2,batChar_y-62,3.2,6.5); //left eye
-			fill(255,0,0);
+			fill(255,0,0,0);
 			ellipse(batChar_x,batChar_y,10,10);
 		}
 		else if(onPlatform)
@@ -353,7 +353,7 @@ function drawBatCharAndCar()
 			fill(0);
 			ellipse(batChar_x-3,batChar_y-62,3.5,7); //left eye
 			ellipse(batChar_x+3,batChar_y-62,3.5,7); //right eye
-			fill(255,0,0);
+			fill(255,0,0,0);
 			ellipse(batChar_x,batChar_y,10,10);
 		}
 		else if(isFalling || isPlummeting)
@@ -365,7 +365,7 @@ function drawBatCharAndCar()
 			fill(0);
 			ellipse(batChar_x-3,batChar_y-70,3.5,7); //right eye
 			ellipse(batChar_x+3,batChar_y-70,3.5,7); //lefteye
-			fill(255,0,0);
+			fill(255,0,0,0);
 			ellipse(batChar_x,batChar_y,10,10);
 			checkIfBatCharDead();
 			return;
@@ -379,7 +379,7 @@ function drawBatCharAndCar()
 			fill(0);
 			ellipse(batChar_x-3,batChar_y-62,3.5,7); //left eye
 			ellipse(batChar_x+3,batChar_y-62,3.5,7); //right eye
-			fill(255,0,0);
+			fill(255,0,0,0);
 			ellipse(batChar_x,batChar_y,10,10);
 		}
 	}
@@ -513,11 +513,11 @@ function badGuy(pos_x, pos_y, range)
 		this.currentX += this.inc;
 		if(this.currentX > this.pos_x + this.range)
 		{
-			this.inc = -1.3;
+			this.inc = -2.5;
 		}
 		else if(this.currentX < this.pos_x)
 		{
-			this.inc = 1.3;
+			this.inc = 2.5;
 		}
 	}
 
